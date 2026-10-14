@@ -32,7 +32,7 @@
         wsHost: window.location.hostname,
         wsPort: 6001,
         forceTLS: false,
-        enabledTransports: ['ws', 'wss'],
+        enabledTransports: ['ws'],
     });
     // Mendengarkan siaran real-time dari channel 'chat'
     window.Echo.channel('chat-channel')

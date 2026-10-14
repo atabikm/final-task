@@ -31,11 +31,34 @@ services:
     depends_on:
       - db
       - redis
+      - reverb
     networks:
       - reverb-net
-    ports:
-      - "6001:6001"   # Port HTTP Nginx/Laravel
 
+  reverb:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile.fpm
+    container_name: reverb_server
+    command: php artisan reverb:start --host=0.0.0.0 --port=6001 --no-interaction
+    volumes:
+      - ./src:/var/www/html
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=reverb_db
+      - DB_USERNAME=reverb_user
+      - DB_PASSWORD=secretpassword
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - "6001:6001"
+    depends_on:
+      - db
+      - redis
+    networks:
+      - reverb-net
 
   redis:
     image: redis:alpine
